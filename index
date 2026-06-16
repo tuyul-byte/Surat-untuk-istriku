@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Untuk Istriku Tersayang - Sampul Surat Cinta</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ---------- SPLASH SCREEN (SAMPUL SURAT) ---------- */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #fbe9f0 0%, #f8ced8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            cursor: pointer;
+        }
+
+        /* Efek sampul surat utama */
+        .envelope-wrapper {
+            position: relative;
+            width: 320px;
+            max-width: 85%;
+            transition: transform 0.3s ease;
+            animation: gentleFloat 2.5s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .envelope {
+            background: #fdf8f0;
+            border-radius: 28px;
+            box-shadow: 0 30px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 215, 200, 0.8), 0 0 0 8px #ffe0e7;
+            padding: 2rem 1.5rem 1.8rem;
+            text-align: center;
+            backdrop-filter: blur(2px);
+            transition: all 0.2s;
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+            box-shadow: 0 35px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Segel lilin */
+        .wax-seal {
+            background: #c9423a;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: -3.2rem auto 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255,255,200,0.5);
+            border: 2px solid #e07a5f;
+            position: relative;
+        }
+
+        .wax-seal i {
+            font-size: 2.2rem;
+            color: #ffefb9;
+            text-shadow: 1px 1px 0 #8b2c1e;
+        }
+
+        .wax-seal::after {
+            content: "♥";
+            position: absolute;
+            font-size: 1.3rem;
+            color: #f5bc70;
+            bottom: -10px;
+            opacity: 0.7;
+        }
+
+        .envelope h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #b23c5c;
+            margin: 1rem 0 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .envelope p {
+            font-family: 'Poppins', sans-serif;
+            color: #7c4f4a;
+            font-size: 0.95rem;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+
+        .to-name {
+            margin-top: 20px;
+            font-style: italic;
+            border-top: 1px dashed #e6bfb5;
+            padding-top: 15px;
+            font-size: 0.9rem;
+            color: #aa6f62;
+        }
+
+        .click-hint {
+            margin-top: 20px;
+            background: rgba(255,230,210,0.7);
+            border-radius: 60px;
+            display: inline-block;
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #b23c5c;
+        }
+
+        .click-hint i {
+            margin-right: 6px;
+        }
+
+        /* hiasan sudut */
+        .corner-decoration {
+            position: absolute;
+            font-size: 2rem;
+            color: #f2aa9e;
+            opacity: 0.5;
+        }
+        .corner-tl { top: -15px; left: -10px; transform: rotate(-15deg); }
+        .corner-br { bottom: -15px; right: -10px; transform: rotate(15deg); }
+
+        /* ---------- KARTU UCAPAN UTAMA (awal tersembunyi) ---------- */
+        .main-card-container {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease, visibility 0s linear 1s;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fce4ec 0%, #ffe6e9 50%, #fff0f3 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .main-card-container.show {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 1s ease, visibility 0s linear 0s;
+        }
+
+        /* floating hearts */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: #f48fb1;
+            font-size: 1.2rem;
+            opacity: 0.6;
+            animation: floatHeart 8s linear infinite;
+            user-select: none;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Kartu utama */
+        .card {
+            max-width: 750px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 48px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2), 0 0 0 12px rgba(255, 182, 193, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(2px);
+            animation: fadeSlideUp 0.7s ease-out;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            background: linear-gradient(145deg, #ffb6c1, #ff8da1);
+            padding: 2rem 1.5rem 3rem 1.5rem;
+            text-align: center;
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .avatar-frame {
+            margin: 0 auto;
+            width: 130px;
+            height: 130px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+            border: 4px solid #ffe6ea;
+        }
+
+        .avatar-frame i {
+            font-size: 5.2rem;
+            color: #f06292;
+        }
+
+        .badge-year {
+            background: #ffecb3;
+            color: #d35400;
+            border-radius: 60px;
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            font-weight: bold;
+            margin: 15px 0 5px;
+        }
+
+        .message-content {
+            padding: 2rem 2rem 1.8rem;
+            text-align: center;
+        }
+
+        .greeting {
+            font-size: 1.8rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: #c2185b;
+            margin-bottom: 1rem;
+        }
+
+        .love-message {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #5d4037;
+            background: #fff9f9;
+            padding: 1.4rem;
+            border-radius: 36px;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border: 1px solid #ffcdd2;
+            text-align: left;
+        }
+
+        .love-message p {
+            margin-bottom: 1rem;
+        }
+
+        .signature {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            text-align: right;
+            font-style: italic;
+            color: #b23c5c;
+            border-top: 1px dashed #f5b7b1;
+            padding-top: 12px;
+            margin-top: 10px;
+        }
+
+        .qualities {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            margin: 30px 0 25px;
+        }
+
+        .quality-item {
+            background: #fce4ec;
+            padding: 12px 18px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #ad1457;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .heart-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 1rem 0 2rem;
+            font-size: 2rem;
+            color: #f06292;
+        }
+
+        .surprise-btn {
+            background: #ff8da1;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 8px 18px rgba(233, 30, 99, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .surprise-btn:hover {
+            background: #e76f8a;
+            transform: scale(1.02);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 380px;
+            width: 85%;
+            border-radius: 48px;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.3);
+            animation: bounceModal 0.4s ease;
+        }
+
+        @keyframes bounceModal {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content i {
+            font-size: 3.8rem;
+            color: #f06292;
+        }
+
+        .close-modal {
+            background: #ffb6c1;
+            border: none;
+            padding: 8px 22px;
+            margin-top: 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .footer {
+            background: #fff0f2;
+            padding: 1.2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #ad1457;
+            border-top: 1px solid #ffcdd2;
+        }
+
+        @media (max-width: 550px) {
+            .hero h1 { font-size: 2rem; }
+            .greeting { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN: SAMPUL SURAT -->
+<div id="splashScreen" class="splash-screen">
+    <div class="envelope-wrapper" id="envelopeClick">
+        <div class="envelope">
+            <div class="wax-seal">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2>💌 Surat Cinta 💌</h2>
+            <p>Untuk perempuan terhebat di hidupku</p>
+            <div class="to-name">
+                <i class="fas fa-star-of-life"></i>  Kepada: Istriku Tersayang  <i class="fas fa-star-of-life"></i>
+            </div>
+            <div class="click-hint">
+                <i class="fas fa-hand-pointer"></i> Klik sampul untuk membuka
+            </div>
+            <div class="corner-decoration corner-tl">🌸</div>
+            <div class="corner-decoration corner-br">🌹</div>
+        </div>
+    </div>
+</div>
+
+<!-- KONTEN UTAMA (KARTU UCAPAN) -->
+<div id="mainCard" class="main-card-container">
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <div class="card">
+        <div class="hero">
+            <div class="avatar-frame">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h1>✨ Happy Birthday, Sayang ✨</h1>
+            <div class="badge-year">
+                <i class="fas fa-birthday-cake"></i>  Istriku Tercinta
+            </div>
+            <div class="sub" style="font-size:1rem; opacity:0.95;">Untuk cahaya hidupku, pelengkap hariku</div>
+        </div>
+
+        <div class="message-content">
+            <div class="greeting">
+                <i class="fas fa-star"></i>  Untukmu, Istriku  <i class="fas fa-star"></i>
+            </div>
+
+            <div class="love-message">
+                <p>🌸 <strong>Selamat ulang tahun, cinta hatiku!</strong> 🌸</p>
+                <p>Hari ini adalah hari yang paling istimewa karena di sinilah, pada hari yang sama, Tuhan menghadirkan malaikat terindah dalam hidupku — kamu. Setiap detik bersamamu adalah hadiah yang tak ternilai, senyummu adalah mentari, tawamu adalah irama terindah dalam hidupku.</p>
+                <p>Terima kasih telah menjadi istri yang luar biasa, sahabat terbaik, dan separuh jiwaku. Bersamamu, dunia terasa lebih hangat, dan setiap hari terasa seperti petualangan baru yang penuh cinta.</p>
+                <p>Semoga di usia yang baru ini, Allah selalu menjaga kesehatanmu, melimpahkan kebahagiaan, dan memberikan semua impian indah yang kamu doakan. Kamu pantas mendapatkan segala hal yang terbaik, karena bagiku, kamulah yang terbaik.</p>
+                <div class="signature">
+                    — Dari suamimu yang selalu mencintaimu lebih dari kata-kata
+                </div>
+            </div>
+
+            <div class="qualities">
+                <div class="quality-item"><i class="fas fa-smile"></i>  Menawan Hati</div>
+                <div class="quality-item"><i class="fas fa-hand-holding-heart"></i>  Penyayang</div>
+                <div class="quality-item"><i class="fas fa-crown"></i>  Kuat & Tegar</div>
+                <div class="quality-item"><i class="fas fa-gem"></i>  Berharga</div>
+            </div>
+
+            <div class="heart-gallery">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-heart"></i>
+            </div>
+
+            <button class="surprise-btn" id="surpriseBtn">
+                <i class="fas fa-gift"></i> Klik Kejutan Cinta
+            </button>
+        </div>
+
+        <div class="footer">
+            <i class="fas fa-infinity"></i> Cintaku untukmu tak pernah berakhir  <i class="fas fa-infinity"></i>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL KEJUTAN -->
+<div id="surpriseModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-cake-candles"></i>
+        <h3>🎉 I Love You! 🎉</h3>
+        <p style="margin: 15px 0; font-size: 1rem;">Sayang, semoga setiap harimu seindah senyumanmu. Kamu adalah anugerah terindah dalam hidupku. <br><strong>Selamat ulang tahun, bidadariku! 💖</strong></p>
+        <button class="close-modal" id="closeModalBtn">Tutup dengan cinta ❤️</button>
+    </div>
+</div>
+
+<script>
+    // Elemen splash screen dan main card
+    const splashScreen = document.getElementById('splashScreen');
+    const mainCard = document.getElementById('mainCard');
+    const envelopeTrigger = document.getElementById('envelopeClick');
+
+    // Fungsi untuk membuka surat (menghilangkan splash & menampilkan kartu)
+    function openLetter() {
+        // Animasi fade out splash
+        splashScreen.style.opacity = '0';
+        splashScreen.style.visibility = 'hidden';
+        // Tampilkan kartu utama
+        mainCard.classList.add('show');
+        // Setelah transisi, hapus splash dari DOM agar tidak mengganggu (opsional)
+        setTimeout(() => {
+            splashScreen.style.display = 'none';
+        }, 900);
+        // Mulai efek hati berjatuhan jika belum jalan
+        startFloatingHearts();
+        // Trigger sedikit efek suara? tidak perlu, hanya visual
+    }
+
+    // Event klik pada sampul surat
+    envelopeTrigger.addEventListener('click', openLetter);
+
+    // Optional: jika pengguna tekan tombol enter atau spasi ketika fokus (aksesibilitas)
+    envelopeTrigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLetter();
+        }
+    });
+    // Atribut role agar bisa di-focus? Kita beri tabindex
+    envelopeTrigger.setAttribute('tabindex', '0');
+    envelopeTrigger.setAttribute('role', 'button');
+
+    // ----- Floating hearts effect untuk kartu utama (setelah terbuka) -----
+    let heartsInterval;
+    function startFloatingHearts() {
+        if (heartsInterval) return;
+        // Buat hati setiap 500ms
+        heartsInterval = setInterval(() => {
+            // Hanya buat hati jika kartu utama sedang tampil
+            if (mainCard.classList.contains('show')) {
+                createFloatingHeart();
+            }
+        }, 700);
+        // Buat beberapa hati awal
+        for (let i = 0; i < 12; i++) {
+            setTimeout(createFloatingHeart, i * 150);
+        }
+    }
+
+    function createFloatingHeart() {
+        const heartsContainer = document.getElementById('floatingHearts');
+        if (!heartsContainer) return;
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '<i class="fas fa-heart"></i>';
+        const size = Math.random() * 20 + 12;
+        heart.style.fontSize = size + 'px';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = Math.random() * 5 + 5 + 's';
+        heart.style.animationDelay = Math.random() * 3 + 's';
+        heart.style.opacity = Math.random() * 0.6 + 0.2;
+        heartsContainer.appendChild(heart);
+        setTimeout(() => {
+            if (heart && heart.remove) heart.remove();
+        }, 11000);
+    }
+
+    // Jika halaman dimuat dan pengguna belum klik, jangan dulu tampilkan main card, dan hati belum jalan.
+    // Pastikan main card hidden awal (class show hilang)
+    mainCard.classList.remove('show');
+
+    // Namun jika suatu saat ingin ada fallback, kita siapkan juga style splash screen tetap ada.
+
+    // ---- Surprise modal logic (sama seperti sebelumnya) ----
+    const surpriseBtn = document.getElementById('surpriseBtn');
+    const modal = document.getElementById('surpriseModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    if (surpriseBtn) {
+        surpriseBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            // ledakan hati meriah
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const burstHeart = document.createElement('div');
+                    burstHeart.classList.add('heart');
+                    burstHeart.innerHTML = '<i class="fas fa-heart" style="color:#ff69b4"></i>';
+                    burstHeart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                    burstHeart.style.left = (Math.random() * 80 + 10) + '%';
+                    burstHeart.style.top = '70%';
+                    burstHeart.style.animationDuration = '2s';
+                    burstHeart.style.animation = 'floatHeart 2s ease-out forwards';
+                    document.body.appendChild(burstHeart);
+                    setTimeout(() => burstHeart.remove(), 2100);
+                }, i * 50);
+            }
+        });
+    }
+
+    function closeModal() {
+        if (modal) modal.style.display = 'none';
+    }
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    if (modal) window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Efek cursor tiny heart pada kartu utama (hanya jika sudah tampil)
+    document.body.addEventListener('mousemove', (e) => {
+        if (mainCard && mainCard.classList.contains('show') && Math.random() > 0.96) {
+            const miniHeart = document.createElement('div');
+            miniHeart.style.position = 'fixed';
+            miniHeart.style.left = e.pageX - 8 + 'px';
+            miniHeart.style.top = e.pageY - 8 + 'px';
+            miniHeart.style.pointerEvents = 'none';
+            miniHeart.style.zIndex = '9999';
+            miniHeart.innerHTML = '<i class="fas fa-heart" style="color:#f48fb1; font-size:14px;"></i>';
+            document.body.appendChild(miniHeart);
+            setTimeout(() => {
+                miniHeart.style.transition = 'all 0.5s ease';
+                miniHeart.style.opacity = '0';
+                miniHeart.style.transform = 'translateY(-20px)';
+                setTimeout(() => miniHeart.remove(), 500);
+            }, 50);
+        }
+    });
+</script>
+</body>
+</html>
